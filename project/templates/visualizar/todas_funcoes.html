@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class="row g-5">
+    <div class="col-md-6">
+        <h2 class="text-body-emphasis">Funções Principais</h2>
+        <p>Ready to beyond the starter template? Check out these open source projects that you can quickly
+            duplicate to a new GitHub repository.</p>
+        <ul class="list-unstyled ps-0">
+            {% for funcao in projeto.funcoes_basicas.all %}
+            <li>
+                <a class="icon-link mb-1" href="{% url 'detalhes_funcao' projeto_id=funcao.id %}"
+                    rel="noopener">
+                    <svg class="bi" width="16" height="16">
+                        <use xlink:href="#arrow-right-circle" />
+                    </svg>
+                    {{funcao.nome}}
+                </a>
+            </li>
+            {% endfor%}
+        </ul>
+    </div>
+
+{% endblock %}

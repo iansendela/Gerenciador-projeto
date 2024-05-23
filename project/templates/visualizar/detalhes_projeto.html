@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+    .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .bd-mode-toggle {
+        z-index: 1500;
+    }
+</style>
+
+<main>
+
+    <div class="col-lg-8 mx-auto p-4 py-md-5">
+
+
+        <main>
+            <h1 class="text-body-emphasis">{{ projeto.nome }}</h1>
+            <p class="fs-5 col-md-8">{{ projeto.descricao }}</p>
+
+            <div class="mb-5">
+                <a href="{% url 'update_projeto' projeto_id=projeto.id %}"
+                    class="btn btn-success btn-lg px-4">Editar</a>
+
+            </div>
+
+            <hr class="col-3 col-md-2 mb-5">
+
+            <div class="row g-5">
+                <div class="col-md-6">
+                    <h2 class="text-body-emphasis">Funcionalidades</h2>
+                    <p>Ready to beyond the starter template? Check out these open source projects that you can quickly
+                        duplicate to a new GitHub repository.</p>
+                    <ul class="list-unstyled ps-0">
+                        {% for funcao in projeto.funcoes_basicas.all %}
+                        <li>
+                            <a class="icon-link mb-1" href="{% url 'detalhes_funcao' projeto_id=funcao.id %}"
+                                rel="noopener">
+                                <svg class="bi" width="16" height="16">
+                                    <use xlink:href="#arrow-right-circle" />
+                                </svg>
+                                {{funcao.nome}}
+                            </a>
+                        </li>
+                        {% endfor%}
+
+                        <div class="col-lg-6 col-xxl-4 my-3 ">
+                            <div class="d-grid gap-2">
+                                {% if tamanho_funcao > 5 %}
+                                <button class="btn btn-outline-secondary" type="button"
+                                    onclick="window.location.href='{% url 'funcoes' projeto_id=projeto.id %}'">Todas
+                                    funções</button>
+                                {% endif %}
+                                <button class="btn btn-primary" type="button"
+                                    onclick="window.location.href='{% url 'nova_funcao' projeto_id=projeto.id %}'">Nova
+                                    funcionalidade</button>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+
+
+                <!--Mais detalhes-->
+                <div class="col-md-6">
+                    <h2 class="text-body-emphasis">Mais Detalhes</h2>
+                    <p>Read more detailed instructions and documentation on using or contributing to Bootstrap.</p>
+                    <ul class="list-unstyled ps-0">
+                        <li>
+                            <p class="icon-link mb-1">
+                                <svg class="bi" width="16" height="16">
+                                    <use xlink:href="#arrow-right-circle" />
+                                </svg>
+                                Estado: {{ projeto.estado_projeto }}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="icon-link mb-1">
+                                <svg class="bi" width="16" height="16">
+                                    <use xlink:href="#arrow-right-circle" />
+                                </svg>
+                                Prioridade: {{ projeto.prioridade}}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="icon-link mb-1">
+                                <svg class="bi" width="16" height="16">
+                                    <use xlink:href="#arrow-right-circle" />
+                                </svg>
+                                Tempo Total do Projeto: {{ hora_total_gasta }}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="icon-link mb-1">
+                                <svg class="bi" width="16" height="16">
+                                    <use xlink:href="#arrow-right-circle" />
+                                </svg>
+                                Email: {{ projeto.email_usuario }}
+                            </p>
+                        </li>
+                        {% if exibir_botao %}
+                        <div class="col-lg-6 col-xxl-4 my-3 ">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" type="button"
+                                    onclick="window.location.href='{% url 'adicionar_trabalho' projeto_id=projeto.id %}'">Adiciona
+                                    o tempo</button>
+                            </div>
+                        </div> 
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-center py-5">
+        <button class="btn btn-outline-secondary d-inline-flex align-items-center" type="button"
+            onclick="window.location.href='{% url 'projetos' %}'">
+            Voltar
+            <svg class="bi ms-1" width="20" height="20">
+                <use xlink:href="#arrow-right-short" />
+            </svg>
+        </button>
+    </div>
+
+{% endblock %}

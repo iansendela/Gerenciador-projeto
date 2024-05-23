@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+    .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .bd-mode-toggle {
+        z-index: 1500;
+    }
+
+
+    .center-text {
+      position: absolute;
+      top: 75%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+</style>
+
+
+<!-- ... Filtros ... 
+
+    vou adicionar filtros aqui
+
+-->
+
+<div class="album py-5 bg-body-tertiary">
+    <h1 class="text-center text-primary h1">Meus Projetos</h1>
+        <div class="container">
+    </div>
+</div>
+
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <!-- ... Filtros ... -->
+        <form method="get" action="{% url 'todos_projetos' %}" class="mt-3">
+            <div class="row g-3">
+            <div class="col-md-4">
+                <label for="id_categoria">Dificuldades dos Projetos:</label>
+                <select id="id_categoria" name="dificuldade" class="form-select">
+                    <option value="" {% if not categoria_selecionada %}selected{% endif %}>Todas as categorias</option>
+                    <option value="simples" {% if categoria_selecionada == 'simples' %}selected{% endif %}>Simples</option>
+                    <option value="intermediario" {% if categoria_selecionada == 'intermediario' %}selected{% endif %}>Intermediarior</option>
+                    <option value="complexo" {% if categoria_selecionada == 'complexo' %}selected{% endif %}>Complexo</option>
+                    <option value="falta de recursos" {% if categoria_selecionada == 'falta de recursos' %}selected{% endif %}>Falta de recursos</option>
+                    <option value="prazos apertados" {% if categoria_selecionada == 'prazos apertados' %}selected{% endif %}>Prazos apertados</option>
+                    <option value="falta de experiencia" {% if categoria_selecionada == 'falta de experiencia' %}selected{% endif %}>Falta de experiência</option>
+                    <option value="complexidade do projeto" {% if categoria_selecionada == 'complexidade do projeto' %}selected{% endif %}>Saúde</option>
+                    <option value="falta de comunicacao" {% if categoria_selecionada == 'falta de comunicacao' %}selected{% endif %}>Falta de comuinicação</option>
+                    <option value="falta de suporte da equipe" {% if categoria_selecionada == 'falta de suporte da equipe' %}selected{% endif %}>Falta de suporte da equipa</option>
+                    <option value="conflitos de interesse" {% if categoria_selecionada == 'conflitos de interesse' %}selected{% endif %}>Conflitos de interesses</option>
+                    <option value="problema de integracao" {% if categoria_selecionada == 'problema de integracao' %}selected{% endif %}>Problemas de integração</option>
+                    <option value="outros" {% if categoria_selecionada == 'outros' %}selected{% endif %}>Outros</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="id_prioridade">Prioridade:</label>
+                <select id="id_prioridade" name="prioridade" class="form-select">
+                    <option value="" {% if not prioridade_selecionada %}selected{% endif %}>Todas as prioridades</option>
+                    <option value="baixa" {% if prioridade_selecionada == 'baixa' %}selected{% endif %}>Baixa</option>
+                    <option value="media" {% if prioridade_selecionada == 'media' %}selected{% endif %}>Media</option>
+                    <option value="alta" {% if prioridade_selecionada == 'alta' %}selected{% endif %}>Alta</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="id_status" class="mr-2 ml-4">Estado:</label>
+                <select id="id_status" name="status" class="form-select">
+                    <option value="" {% if not status_selecionado %}selected{% endif %}>Todos</option>
+                    <option value="andamento" {% if status_selecionado == 'andamento' %}selected{% endif %}>Em andamentos</option>
+                    <option value="pausado" {% if status_selecionado == 'pausado' %}selected{% endif %}>Pausados</option>
+                    <option value="finalizado" {% if status_selecionado == 'finalizado' %}selected{% endif %}>Finalizados</option>
+                </select>
+            </div>
+
+            <div><input type="submit" value="Filtrar"></div>
+        </form>
+    </div>
+</div>
+
+
+<!--Card que vai mostrar meus projetos-->
+
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for projeto in projetos %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                        xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                            dy=".3em">{{ projeto.nome }}</text>
+                    </svg>
+                    <div class="card-body">
+                        <p class="card-text">{{ projeto.descricao }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onclick="window.location.href='{% url 'detalhes_projeto' projeto_id=projeto.id %}' ">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onclick="window.location.href='{% url 'update_projeto' projeto_id=projeto.id %}'">Edit</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                    onclick="window.location.href='{% url 'apagar_projeto' projeto_id=projeto.id %}'">Apagar</button>
+                            </div>
+                            <small class="text-body-secondary">{{ projeto.hours_minutes_ago }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="container py-2 text-center">
+            <h2 class="fw-light center-text">Nenhum projeto encontrado.</h2>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+            {% endblock %}
